@@ -1,0 +1,23 @@
+
+---
+# tasks file for ansible-dockerized-wordpress
+- name: "Launch database container"
+  become: yes
+  docker_container:
+    name: mysql
+    image: mysql:{{ mysql_version }}
+    detach: True
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      RANCHER_NETWORK: true
+
+- name: Wait a few minutes for the IPs to be set to the container
+  wait_for: timeout=120
+
+# The following tasks help with the connection of the containers in different hosts in Rancher
+- name: Fetch the MySQL Container IP
+  shell: docker exec mysql ip -o -4 addr list eth1 | awk '{print $4}' | cut -d/ -f1 |  sed -n 2p
+  register: mysql_sec_ip
+
+- name: print the mysql rancher's ip
+  debug: msg={{ mysql_sec_ip.stdout }}

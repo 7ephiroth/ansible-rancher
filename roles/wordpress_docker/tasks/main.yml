@@ -1,0 +1,20 @@
+- name: Create a wordpress docker container
+  become: yes
+  docker_container:
+    name: wordpress
+    image: wordpress:{{ wordpress_version }}
+    detach: True
+    ports:
+      - 80:80
+    env:
+      RANCHER_NETWORK: true,
+      WORDPRESS_DB_HOST: "{{ mysql_host }}:3306"
+      WORDPRESS_DB_PASSWORD: "{{ mysql_root_password }}"
+      #WORDPRESS_AUTH_KEY: "{{ wordpress_auth_key }}"
+      #WORDPRESS_SECURE_AUTH_KEY: "{{ wordpress_secure_auth_key }}"
+      #WORDPRESS_LOGGED_IN_KEY: "{{ wordpress_logged_in_key }}"
+      #WORDPRESS_NONCE_KEY: "{{ wordpress_nonce_key }}"
+      #WORDPRESS_AUTH_SALT: "{{ wordpress_auth_salt }}"
+      #WORDPRESS_SECURE_AUTH_SALT: "{{ wordpress_secure_auth_salt }}"
+      #WORDPRESS_NONCE_SALT: "{{ wordpress_nonce_salt }}"
+      #WORDPRESS_LOGGED_IN_SALT: "{{ wordpress_loggedin_salt }}"

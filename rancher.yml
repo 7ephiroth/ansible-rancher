@@ -1,0 +1,52 @@
+---
+- name: Installing and configuring Docker
+  hosts: all
+  become: yes
+  vars_files:
+    - providers/other/vars/other_vars.yml
+  vars:
+    - ansible_python_interpreter: /usr/bin/python2
+  roles:
+    - { role: docker }
+
+- name: Setting up Rancher Server
+  hosts: "Rancher"
+  vars_files:
+    - providers/other/vars/other_vars.yml
+  become: yes
+  vars:
+    - ansible_python_interpreter: /usr/bin/python2
+  roles:
+    - { role: rancher }
+
+- name: Register Rancher Hosts
+  hosts: "nodes"
+  become: yes
+  vars_files:
+    - providers/other/vars/other_vars.yml
+  vars:
+    - ansible_python_interpreter: /usr/bin/python2
+  roles:
+    - { role: rancher_reg }
+
+# play 4
+- name: Deploy MySQL Container
+  hosts: "database"
+  become: yes
+  #vars_files:
+  #  - providers/other/vars/other_vars.yml
+  vars:
+    - ansible_python_interpreter: /usr/bin/python2
+  roles:
+      - { role: mysql_docker }
+
+# play 5
+- name: Deploy WordPress App
+  hosts: "application"
+  become: yes
+  #vars_files:
+  #  - providers/other/vars/other_vars.yml
+  vars:
+    - ansible_python_interpreter: /usr/bin/python2
+  roles:
+    - { role: wordpress_docker }

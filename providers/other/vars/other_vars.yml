@@ -1,0 +1,14 @@
+---
+
+rancher_name: rancher_server
+rancher_server: "{{ hostvars['rancher']['ansible_ssh_host'] }}"
+rancher_version: v1.5.3
+rancher_port: 8080
+# MySQL variables
+mysql_root_password: "isjoe"
+mysql_host: "{{ hostvars.agent2.mysql_sec_ip.stdout }}"
+mysql_port: 3306
+mysql_version: 5.5
+
+# WordPress variables
+wordpress_version: latest
